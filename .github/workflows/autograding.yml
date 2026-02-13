@@ -1,0 +1,35 @@
+name: Autograding
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Make scripts executable
+      run: chmod +x bitwise.sh reverse.sh
+
+    - name: Test AND operation
+      run: |
+        source bitwise.sh
+        result=$(bitwise_op 1 10101 11001)
+        if [ "$result" = "10001" ]; then
+          echo "Test Passed"
+        else
+          echo "Test Failed"
+          exit 1
+        fi
+
+    - name: Test reverseWords
+      run: |
+        source reverse.sh
+        result=$(reverseWords "one two three")
+        if [ "$result" = "three two one" ]; then
+          echo "Test Passed"
+        else
+          echo "Test Failed"
+          exit 1
+        fi
