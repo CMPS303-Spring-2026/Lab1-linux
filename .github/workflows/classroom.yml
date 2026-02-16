@@ -1,0 +1,109 @@
+name: Autograding Tests
+'on':
+- push
+- repository_dispatch
+permissions:
+  checks: write
+  actions: read
+  contents: read
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: reverse-words-2
+      id: reverse-words-2
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: reverse-words-2
+        setup-command: ''
+        command: bash -c 'cd Requirement || exit 1; source ./reverse.sh; result=$(reverseWords
+          "one two three"); [ "$result" = "three two one" ] && exit 0 || exit 1'
+        timeout: 1
+        max-score: 5
+    - name: reverse-words-3
+      id: reverse-words-3
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: reverse-words-3
+        setup-command: ''
+        command: bash -c 'cd Requirement || exit 1; source ./reverse.sh; result=$(reverseWords
+          "A"); [ "$result" = "A" ] && exit 0 || exit 1'
+        timeout: 1
+        max-score: 5
+    - name: reverse-words-4
+      id: reverse-words-4
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: reverse-words-4
+        setup-command: ''
+        command: bash -c 'cd Requirement || exit 1; source ./reverse.sh; result=$(reverseWords
+          ""); [ -z "$result" ] && exit 0 || exit 1'
+        timeout: 1
+        max-score: 5
+    - name: bitwise-1
+      id: bitwise-1
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: bitwise-1
+        setup-command: ''
+        command: bash -c 'cd Requirement || exit 1; source ./bitwise.sh; result=$(bitwise_op
+          1 10101); [ "$result" = "0" ] && exit 0 || exit 1'
+        timeout: 1
+        max-score: 5
+    - name: bitwise-2
+      id: bitwise-2
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: bitwise-2
+        setup-command: ''
+        command: bash -c 'cd Requirement || exit 1; source ./bitwise.sh; result=$(bitwise_op
+          3 10101 11001); [ "$result" = "1100" ] && exit 0 || exit 1'
+        timeout: 1
+        max-score: 5
+    - name: bitwise-3
+      id: bitwise-3
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: bitwise-3
+        setup-command: ''
+        command: bash -c 'cd Requirement || exit 1; source ./bitwise.sh; result=$(bitwise_op
+          2 10101 11001); [ "$result" = "11101" ] && exit 0 || exit 1'
+        timeout: 1
+        max-score: 5
+    - name: bitwise-4
+      id: bitwise-4
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: bitwise-4
+        setup-command: ''
+        command: bash -c 'cd Requirement || exit 1; source ./bitwise.sh; result=$(bitwise_op
+          1 10101 11001); [ "$result" = "10001" ] && exit 0 || exit 1'
+        timeout: 1
+        max-score: 5
+    - name: reverse-words-1
+      id: reverse-words-1
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: reverse-words-1
+        setup-command: ''
+        command: bash -c 'cd Requirement || exit 1; source ./reverse.sh; result=$(reverseWords
+          "Hello world from bash"); [ "$result" = "bash from world Hello" ] && exit
+          0 || exit 1'
+        timeout: 1
+        max-score: 5
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        REVERSE-WORDS-2_RESULTS: "${{steps.reverse-words-2.outputs.result}}"
+        REVERSE-WORDS-3_RESULTS: "${{steps.reverse-words-3.outputs.result}}"
+        REVERSE-WORDS-4_RESULTS: "${{steps.reverse-words-4.outputs.result}}"
+        BITWISE-1_RESULTS: "${{steps.bitwise-1.outputs.result}}"
+        BITWISE-2_RESULTS: "${{steps.bitwise-2.outputs.result}}"
+        BITWISE-3_RESULTS: "${{steps.bitwise-3.outputs.result}}"
+        BITWISE-4_RESULTS: "${{steps.bitwise-4.outputs.result}}"
+        REVERSE-WORDS-1_RESULTS: "${{steps.reverse-words-1.outputs.result}}"
+      with:
+        runners: reverse-words-2,reverse-words-3,reverse-words-4,bitwise-1,bitwise-2,bitwise-3,bitwise-4,reverse-words-1
